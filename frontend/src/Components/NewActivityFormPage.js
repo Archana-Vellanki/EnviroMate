@@ -1,18 +1,57 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import TimePicker from "./TimePicker.js";
+import DatePicker from "react-datepicker";
+import "./styles.css";
+import Layout from "./Layout.js";
+// import "react-datepicker/dist/react-datepicker.css";
+// import "react-time-picker/dist/TimePicker.css";
+// import EventForm from "./Form";
 
 function NewActivityFormPage() {
+  class Activity {
+    constructor(
+      eventName,
+      eventDate,
+      eventTime,
+      eventDescription,
+      location,
+      audience
+    ) {
+      this.eventName = eventName;
+      this.eventDate = eventDate;
+      this.eventTime = eventTime;
+      this.eventDescription = eventDescription;
+      this.audience = audience;
+      this.location = location;
+    }
+  }
   const navigate = useNavigate();
   const [activities, setActivities] = useState([]);
   const [newActivity, setNewActivity] = useState("");
+  const [eventName, setEventName] = useState("");
+  const [eventDescription, setEventDescription] = useState("");
+  const [eventDate, setEventDate] = useState(new Date());
+  const [eventTime, setEventTime] = useState("12:00");
+  const [location, setLocation] = useState("");
+  const [audience, setAudience] = useState("");
   const [message, setMessage] = useState("");
   const [isCreated, setIsCreated] = useState(false);
   const handleNewActivityChange = (e) => {
     setNewActivity(e.target.value);
   };
 
-  const handleCreateActivity = () => {
+  const handleCreateActivity = (e) => {
+    e.preventDefault();
+    const newActivity = new Activity(
+      eventName,
+      eventDescription,
+      eventTime,
+      eventDate,
+      location,
+      audience
+    );
     axios
       .post("http://localhost:5000/new-activity", { newActivity })
       .then((response) => {
@@ -31,169 +70,124 @@ function NewActivityFormPage() {
   };
 
   return (
-    <div>
-      <h2>Create New Activity</h2>
-      <input
-        type="text"
-        value={newActivity}
-        onChange={handleNewActivityChange}
-        placeholder="Enter activity name"
-      />
-      <button onClick={handleCreateActivity}>Create</button>
-      <p>{message}</p>{" "}
-    </div>
+    // <EventForm />
+    // <div>
+    //   <h2>Create New Activity</h2>
+    //   <input
+    //     type="text"
+    //     value={newActivity}
+    //     onChange={handleNewActivityChange}
+    //     placeholder="Enter activity name"
+    //   />
+    //   <button onClick={handleCreateActivity}>Create</button>
+    //   <p>{message}</p>{" "}
+    // </div>
+    <Layout>
+      <div className="form-container">
+        <h2 className="form-title">Create New Activity</h2>
+        <form className="form">
+          <div className="form-group">
+            <label htmlFor="eventName" className="form-label">
+              Event Name:
+            </label>
+            <input
+              type="text"
+              id="eventName"
+              value={eventName}
+              onChange={(e) => setEventName(e.target.value)}
+              placeholder="Enter event name"
+              className="form-input"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="eventDescription" className="form-label">
+              Event Description:
+            </label>
+            <textarea
+              id="eventDescription"
+              value={eventDescription}
+              onChange={(e) => setEventDescription(e.target.value)}
+              placeholder="Enter event description"
+              className="form-input"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="eventDate" className="form-label">
+              Event Date:
+            </label>
+            <DatePicker
+              id="eventDate"
+              selected={eventDate}
+              onChange={(date) => setEventDate(date)}
+              dateFormat="MMMM d, yyyy"
+              className="form-input"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="eventTime" className="form-label">
+              Event Time:
+            </label>
+            <TimePicker
+              id="eventTime"
+              value={eventTime}
+              onChange={(time) => setEventTime(time)}
+              className="form-input"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="location" className="form-label">
+              Location:
+            </label>
+            <select
+              id="location"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              className="form-select"
+              required
+            >
+              <option value="">Select Location</option>
+              <option value="City Plaza Park">City Plaza Park</option>
+              <option value="The Forge Garden">The Forge Garden</option>
+              <option value="Santa Clara Farmers Market">
+                Santa Clara Farmers Market
+              </option>
+              <option value="Mission Garden">Mission Garden</option>
+              <option value="Larry J. Marsalli Park">
+                Larry J. Marsalli Park
+              </option>
+              {/* Add more options as needed */}
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="audience" className="form-label">
+              Audience:
+            </label>
+            <select
+              id="audience"
+              value={audience}
+              onChange={(e) => setAudience(e.target.value)}
+              className="form-select"
+              required
+            >
+              <option value="">Select Audience</option>
+              <option value="kids">Kids</option>
+              <option value="adults">Adults</option>
+              <option value="all">Open to All</option>
+              {/* Add more options as needed */}
+            </select>
+          </div>
+          <button onClick={handleCreateActivity} className="form-button">
+            Create
+          </button>
+          <p className="form-label">{message}</p>{" "}
+        </form>
+      </div>
+    </Layout>
   );
 }
 
 export default NewActivityFormPage;
-
-// import Button from "react-bootstrap/Button";
-// import Col from "react-bootstrap/Col";
-// import Form from "react-bootstrap/Form";
-// import InputGroup from "react-bootstrap/InputGroup";
-// import Row from "react-bootstrap/Row";
-// import * as formik from "formik";
-// import * as yup from "yup";
-
-// function FormExample() {
-//   const handleCreateActivity = () => {
-//     setActivities([...activities, newActivity]);
-//     setNewActivity(newActivity);
-//   };
-//   const { Formik } = formik;
-
-//   const schema = yup.object().shape({
-//     firstName: yup.string().required(),
-//     lastName: yup.string().required(),
-//     username: yup.string().required(),
-//     city: yup.string().required(),
-//     state: yup.string().required(),
-//     zip: yup.string().required(),
-//     terms: yup.bool().required().oneOf([true], "Terms must be accepted"),
-//   });
-
-//   return (
-//     <Formik
-//       validationSchema={schema}
-//       onSubmit={console.log}
-//       initialValues={{
-//         firstName: "Mark",
-//         lastName: "Otto",
-//         username: "",
-//         city: "",
-//         state: "",
-//         zip: "",
-//         terms: false,
-//       }}
-//     >
-//       {({ handleSubmit, handleChange, values, touched, errors }) => (
-//         <Form noValidate onSubmit={handleSubmit}>
-//           <Row className="mb-3">
-//             <Form.Group as={Col} md="4" controlId="validationFormik01">
-//               <Form.Label>First name</Form.Label>
-//               <Form.Control
-//                 type="text"
-//                 name="firstName"
-//                 value={values.firstName}
-//                 onChange={handleChange}
-//                 isValid={touched.firstName && !errors.firstName}
-//               />
-//               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-//             </Form.Group>
-//             <Form.Group as={Col} md="4" controlId="validationFormik02">
-//               <Form.Label>Last name</Form.Label>
-//               <Form.Control
-//                 type="text"
-//                 name="lastName"
-//                 value={values.lastName}
-//                 onChange={handleChange}
-//                 isValid={touched.lastName && !errors.lastName}
-//               />
-
-//               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-//             </Form.Group>
-//             <Form.Group as={Col} md="4" controlId="validationFormikUsername">
-//               <Form.Label>Username</Form.Label>
-//               <InputGroup hasValidation>
-//                 <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
-//                 <Form.Control
-//                   type="text"
-//                   placeholder="Username"
-//                   aria-describedby="inputGroupPrepend"
-//                   name="username"
-//                   value={values.username}
-//                   onChange={handleChange}
-//                   isInvalid={!!errors.username}
-//                 />
-//                 <Form.Control.Feedback type="invalid">
-//                   {errors.username}
-//                 </Form.Control.Feedback>
-//               </InputGroup>
-//             </Form.Group>
-//           </Row>
-//           <Row className="mb-3">
-//             <Form.Group as={Col} md="6" controlId="validationFormik03">
-//               <Form.Label>City</Form.Label>
-//               <Form.Control
-//                 type="text"
-//                 placeholder="City"
-//                 name="city"
-//                 value={values.city}
-//                 onChange={handleChange}
-//                 isInvalid={!!errors.city}
-//               />
-
-//               <Form.Control.Feedback type="invalid">
-//                 {errors.city}
-//               </Form.Control.Feedback>
-//             </Form.Group>
-//             <Form.Group as={Col} md="3" controlId="validationFormik04">
-//               <Form.Label>State</Form.Label>
-//               <Form.Control
-//                 type="text"
-//                 placeholder="State"
-//                 name="state"
-//                 value={values.state}
-//                 onChange={handleChange}
-//                 isInvalid={!!errors.state}
-//               />
-//               <Form.Control.Feedback type="invalid">
-//                 {errors.state}
-//               </Form.Control.Feedback>
-//             </Form.Group>
-//             <Form.Group as={Col} md="3" controlId="validationFormik05">
-//               <Form.Label>Zip</Form.Label>
-//               <Form.Control
-//                 type="text"
-//                 placeholder="Zip"
-//                 name="zip"
-//                 value={values.zip}
-//                 onChange={handleChange}
-//                 isInvalid={!!errors.zip}
-//               />
-
-//               <Form.Control.Feedback type="invalid">
-//                 {errors.zip}
-//               </Form.Control.Feedback>
-//             </Form.Group>
-//           </Row>
-//           <Form.Group className="mb-3">
-//             <Form.Check
-//               required
-//               name="terms"
-//               label="Agree to terms and conditions"
-//               onChange={handleChange}
-//               isInvalid={!!errors.terms}
-//               feedback={errors.terms}
-//               feedbackType="invalid"
-//               id="validationFormik0"
-//             />
-//           </Form.Group>
-//           <Button type="submit">Submit form</Button>
-//         </Form>
-//       )}
-//     </Formik>
-//   );
-// }
-
-// export default FormExample;

@@ -24,12 +24,34 @@ def login():
 @app.route('/new-activity', methods=['POST'])
 def create_activity():
     data = request.json
-    activity_name = data['newActivity']
-    if activity_name:
-        activities.append(activity_name)
-        return jsonify({'message': activity_name + ' Activity created successfully'})
+    print(data)
+    # Extract individual fields from the activity data
+    event_name = data['newActivity'].get('eventName')
+    event_description = data['newActivity'].get('eventDescription')
+    event_date = data['newActivity'].get('eventDate')
+    event_time = data['newActivity'].get('eventTime')
+    location = data['newActivity'].get('location')
+    audience = data['newActivity'].get('audience')
+
+    # Create a new activity dictionary
+    activity = {
+        'eventName': event_name,
+        'eventDescription': event_description,
+        'eventDate': event_date,
+        'eventTime': event_time,
+        'location': location,
+        'audience': audience
+    }
+    activities.append(activity)
+    if event_name != None:
+        print("if")
+        return jsonify({'message': event_name + ' Activity created successfully'})
     else:
+        print("else")
         return jsonify({'error': 'Invalid activity name'}), 400
+
+    # return jsonify({'message': 'Activity created successfully'})
+    # activity_name = data['newActivity']
 
 
 if __name__ == '__main__':
