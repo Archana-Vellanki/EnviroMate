@@ -1,5 +1,11 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
+import firebase_admin
+from firebase_admin import db, credentials
+
+cred = credentials.Certificate("firebase_cred.json")
+firebase_admin.initialize_app(
+    cred, {"databaseURL": "https://h4h2024-300a6-default-rtdb.firebaseio.com/"})
 
 app = Flask(__name__)
 CORS(app)
@@ -45,6 +51,8 @@ def create_activity():
     activities.append(activity)
     if event_name != None:
         print("if")
+        db.reference("/"+event_name).update({"event_desc": event_description, "event_date": event_date,
+                                             "event_time": event_time, "event_loc": location, "event_aud": audience})
         return jsonify({'message': event_name + ' Activity created successfully'})
     else:
         print("else")
