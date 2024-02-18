@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import LandingPage from "./LandingPage";
+import "./styles.css";
+import Layout from "./Layout";
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -25,29 +27,31 @@ function LoginPage() {
       });
   };
   return (
-    <div>
-      {isLoggedIn ? (
-        <LandingPage />
-      ) : (
-        <div>
-          <h1>Login</h1>
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button onClick={handleLogin}>Login</button>
-          <p>{message}</p>{" "}
-        </div>
-      )}
-    </div>
+    <Layout>
+      <div className="app-container">
+        {isLoggedIn ? (
+          <LandingPage />
+        ) : (
+          <div className="login-form">
+            <h1>EcoUnity</h1>
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button onClick={handleLogin}>Login</button>
+            <p>{message}</p>{" "}
+          </div>
+        )}
+      </div>
+    </Layout>
   );
 }
 
