@@ -13,16 +13,16 @@ function NewActivityFormPage() {
   class Activity {
     constructor(
       eventName,
+      eventDescription,
       eventDate,
       eventTime,
-      eventDescription,
       location,
       audience
     ) {
       this.eventName = eventName;
+      this.eventDescription = eventDescription;
       this.eventDate = eventDate;
       this.eventTime = eventTime;
-      this.eventDescription = eventDescription;
       this.audience = audience;
       this.location = location;
     }
@@ -47,8 +47,8 @@ function NewActivityFormPage() {
     const newActivity = new Activity(
       eventName,
       eventDescription,
-      eventTime,
       eventDate,
+      eventTime,
       location,
       audience
     );
@@ -60,6 +60,12 @@ function NewActivityFormPage() {
         setNewActivity(newActivity);
         setIsCreated(true);
         setMessage(response.data.message);
+        setEventName("");
+        setEventDescription("");
+        setEventDate(new Date());
+        setEventTime("12:00");
+        setLocation("");
+        setAudience("");
         console.log("Response from server:", response);
       })
       .catch((error) => {

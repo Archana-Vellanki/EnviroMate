@@ -12,6 +12,7 @@ function EventForm() {
   const [message, setMessage] = useState("");
   const [isCreated, setIsCreated] = useState(false);
   const [eventName, setEventName] = useState("");
+  const [eventDescription, setEventDescription] = useState("");
   const [eventDate, setEventDate] = useState(new Date());
   const [eventTime, setEventTime] = useState("12:00");
   const [location, setLocation] = useState("");

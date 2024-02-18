@@ -33,7 +33,7 @@ function LoginPage() {
           <LandingPage />
         ) : (
           <div className="login-form">
-            <h1>EcoUnity</h1>
+            <h1>EnviroMate</h1>
             <input
               type="text"
               placeholder="Username"
