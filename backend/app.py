@@ -83,7 +83,7 @@ def index():
         "Larry J. Marsalli Park": {"latitude": 37.35507, "longitude": -121.944549, "img": "template/missionlibrary.jpg"}
     }
     events = []
-
+    i = 0
     for event in event_deets:
         print(event_deets)
         print(event, type(event))
@@ -94,12 +94,13 @@ def index():
             event_deets[event]['event_loc']]['longitude'], 'img': location_cordinates[event_deets[event]['event_loc']]['img']}
         print(event_details)
         events.append(d)
+        i += 1
 
     print(events)
 
     # Create a folium map centered around the mean of the given latitude and longitude
-    map = folium.Map(location=[sum(loc['latitude'] for loc in events) / len(location_cordinates),
-                               sum(loc['longitude'] for loc in events) / len(location_cordinates)],
+    map = folium.Map(location=[sum(loc['latitude'] for loc in events) / i,
+                               sum(loc['longitude'] for loc in events) / i],
                      zoom_start=16)
 
     # Add markers for each location to the map
